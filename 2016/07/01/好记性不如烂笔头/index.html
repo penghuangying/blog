@@ -84,16 +84,16 @@
 
 
 
-<meta name="description" content="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…">
+<meta name="description" content="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…1.文件在线预览 &amp;emsp;&amp;emsp;一开始不知道文件在线预览要怎么实现，于是，就先看看其它人是怎么实现的。看了 coding.net 的，发现其预览 office 文件用的是微软的Office Web Apps Viewer。google 了之后也基本上只有 Google Docs Viewer 和 微">
 <meta property="og:type" content="article">
 <meta property="og:title" content="好记性不如烂笔头">
 <meta property="og:url" content="http://yoursite.com/2016/07/01/好记性不如烂笔头/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…">
-<meta property="og:updated_time" content="2016-07-01T07:12:59.000Z">
+<meta property="og:description" content="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…1.文件在线预览 &amp;emsp;&amp;emsp;一开始不知道文件在线预览要怎么实现，于是，就先看看其它人是怎么实现的。看了 coding.net 的，发现其预览 office 文件用的是微软的Office Web Apps Viewer。google 了之后也基本上只有 Google Docs Viewer 和 微">
+<meta property="og:updated_time" content="2016-07-01T09:03:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="好记性不如烂笔头">
-<meta name="twitter:description" content="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…">
+<meta name="twitter:description" content="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…1.文件在线预览 &amp;emsp;&amp;emsp;一开始不知道文件在线预览要怎么实现，于是，就先看看其它人是怎么实现的。看了 coding.net 的，发现其预览 office 文件用的是微软的Office Web Apps Viewer。google 了之后也基本上只有 Google Docs Viewer 和 微">
 
 
 
@@ -198,16 +198,6 @@
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-commonweal">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
-            
-            公益404
-          </a>
-        </li>
-      
 
       
     </ul>
@@ -293,7 +283,13 @@
       
 
       
-        <h2 id="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…"><a href="#日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…" class="headerlink" title="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…"></a>日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…</h2>
+        <h5 id="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…"><a href="#日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…" class="headerlink" title="日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…"></a>日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…</h5><h3 id="1-文件在线预览"><a href="#1-文件在线预览" class="headerlink" title="1.文件在线预览"></a>1.文件在线预览</h3><p> &emsp;&emsp;一开始不知道文件在线预览要怎么实现，于是，就先看看其它人是怎么实现的。看了 coding.net 的，发现其预览 office 文件用的是微软的<a href="https://products.office.com/en-us/office-online/view-office-documents-online" target="_blank" rel="external">Office Web Apps Viewer</a>。google 了之后也基本上只有 Google Docs Viewer 和 微软的这个能复合我的使用场景了。使用方法如下：</p>
+<blockquote>
+<h4 id="Google-Docs-Viewer"><a href="#Google-Docs-Viewer" class="headerlink" title="Google Docs Viewer"></a>Google Docs Viewer</h4><p><code>https://docs.google.com/viewer?url=[FILE_URL]</code></p>
+<h4 id="Office-Web-Apps-Viewer"><a href="#Office-Web-Apps-Viewer" class="headerlink" title="Office Web Apps Viewer"></a>Office Web Apps Viewer</h4><p><code>https://view.officeapps.live.com/op/view.aspx?src=[FILE_URL]</code></p>
+</blockquote>
+<p> &emsp;&emsp;按照上面的方法生成文件预览的 url 后，有 iframe 嵌入到自己网站的页面中就可以预览了。因为墙的原因，所以放弃了谷歌的，但微软的是只支持 office 文件，PDF 都不支持，要预览 PDF 文件怎么办呢？直接用浏览器打开预览就可以了，iframe 的 src 为 PDF 文件的原路径久可以咯。当时还碰到一个问题是，一开始后端给的文件路径名是包含端口号的，类似为 <a href="https://site.com:9090/xxx/xxx.docx" target="_blank" rel="external">https://site.com:9090/xxx/xxx.docx</a> ; 不知道为甚么当路径名中存在端口号时，微软的 Viewer 不能获取到这个文件还是怎么回事，要么一直停留在 fetch 的页面，或者直接报个 error 页面出来。最后还是通过修改 nginx 配置来去掉端口号，最后实现了文件在线预览的功能。但预览的速度实在是优点慢。</p>
+
       
     </div>
 
@@ -382,7 +378,7 @@
                src="http://o9gq7lu4s.bkt.clouddn.com/avatar.jpg"
                alt="Point" />
           <p class="site-author-name" itemprop="name">Point</p>
-          <p class="site-description motion-element" itemprop="description">Just Keep Going</p>
+          <p class="site-description motion-element" itemprop="description">Just Keep Going, Better And Better...</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
@@ -411,7 +407,7 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://coding.net/phying" target="_blank" title="Coding">
+                <a href="https://coding.net/u/phying" target="_blank" title="Coding">
                   
                     <i class="fa fa-fw fa-globe"></i>
                   
@@ -464,7 +460,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…"><span class="nav-number">1.</span> <span class="nav-text">日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…"><span class="nav-number">1.</span> <span class="nav-text">日常工作和生活中碰到的技术性的，非技术性的，各种问题，记下来，以便今后翻阅的，持续更新中…</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-文件在线预览"><span class="nav-number"></span> <span class="nav-text">1.文件在线预览</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Google-Docs-Viewer"><span class="nav-number"></span> <span class="nav-text">Google Docs Viewer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Office-Web-Apps-Viewer"><span class="nav-number"></span> <span class="nav-text">Office Web Apps Viewer</span></a></div>
             
           </div>
         </section>
