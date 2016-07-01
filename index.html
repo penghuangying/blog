@@ -294,7 +294,7 @@
 <h4 id="Google-Docs-Viewer"><a href="#Google-Docs-Viewer" class="headerlink" title="Google Docs Viewer"></a>Google Docs Viewer</h4><p><code>https://docs.google.com/viewer?url=[FILE_URL]</code></p>
 <h4 id="Office-Web-Apps-Viewer"><a href="#Office-Web-Apps-Viewer" class="headerlink" title="Office Web Apps Viewer"></a>Office Web Apps Viewer</h4><p><code>https://view.officeapps.live.com/op/view.aspx?src=[FILE_URL]</code></p>
 </blockquote>
-<p> &emsp;&emsp;按照上面的方法生成文件预览的 url 后，有 iframe 嵌入到自己网站的页面中就可以预览了。因为墙的原因，所以放弃了谷歌的，但微软的是只支持 office 文件，PDF 都不支持，要预览 PDF 文件怎么办呢？直接用浏览器打开预览就可以了，iframe 的 src 为 PDF 文件的原路径久可以咯。当时还碰到一个问题是，一开始后端给的文件路径名是包含端口号的，类似为 <a href="https://site.com:9090/xxx/xxx.docx" target="_blank" rel="external">https://site.com:9090/xxx/xxx.docx</a> ; 不知道为甚么当路径名中存在端口号时，微软的 Viewer 不能获取到这个文件还是怎么回事，要么一直停留在 fetch 的页面，或者直接报个 error 页面出来。最后还是通过修改 nginx 配置来去掉端口号，最后实现了文件在线预览的功能。但预览的速度实在是优点慢。</p>
+<p> &emsp;&emsp;按照上面的方法生成文件预览的 url 后，有 iframe 嵌入到自己网站的页面中就可以预览了。因为墙的原因，所以放弃了谷歌的，但微软的是只支持 office 文件，PDF 都不支持，要预览 PDF 文件怎么办呢？直接用浏览器打开预览就可以了，iframe 的 src 为 PDF 文件的原路径久可以咯。当时还碰到一个问题是，一开始后端给的文件路径名是包含端口号的，类似为 <a href="https://site.com:9090/xxx/xxx.docx" target="_blank" rel="external">https://site.com:9090/xxx/xxx.docx</a> ; 不知道为甚么当路径名中存在端口号时，微软的 Viewer 不能获取到这个文件还是怎么回事，要么一直停留在 fetch 的页面，或者直接报个 error 页面出来。最后还是通过修改 nginx 配置来去掉端口号，最后实现了文件在线预览的功能。但预览的速度实在是有点慢。</p>
 
           
         
@@ -374,7 +374,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
