@@ -238,6 +238,118 @@
             
               
                 
+                <a class="post-title-link" href="/2017/01/20/LazyMan的两种实现方法/" itemprop="url">
+                  LazyMan的两种实现方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-01-20T21:40:00+08:00" content="2017-01-20">
+              2017-01-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/20/LazyMan的两种实现方法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/20/LazyMan的两种实现方法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天在网上看到一题面试题，觉得挺有意思的。题目描述如下：</p>
+<blockquote>
+<p>实现一个LazyMan，可以按照以下方式调用:<br><br>LazyMan(“Hank”)输出:<br><br>Hi! This is Hank!</p>
+<p>LazyMan(“Hank”).sleep(10).eat(“dinner”)输出<br><br>Hi! This is Hank!<br><br>//等待10秒..<br><br>Wake up after 10<br><br>Eat dinner~</p>
+<p>LazyMan(“Hank”).eat(“dinner”).eat(“supper”)输出<br><br>Hi This is Hank!<br><br>Eat dinner~<br><br>Eat supper~</p>
+<p>LazyMan(“Hank”).sleepFirst(5).eat(“supper”)输出<br><br>//等待5秒<br><br>Wake up after 5<br><br>Hi This is Hank!<br><br>Eat supper</p>
+<p>以此类推。</p>
+</blockquote>
+<p>这是考察 javaScript 流程控制的问题。我自己想到的方法是用队列的方式，记录任务的执行顺序，一个一个线性按顺序完成，即第一种方法的实现。写完之后，在网上搜了一下，看到不少网友都有不同的方法实现了，除了第一种用队列的方法外，还有一种方式是用到了 Promise。下面给出两种解法的代码：</p>
+<h3 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_lazyMan</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.tasks = []; <span class="comment">// 任务队列</span></span><br><span class="line">      <span class="keyword">let</span> that = <span class="keyword">this</span>;</span><br><span class="line">      <span class="keyword">let</span> currentTask = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">'Hi! This is '</span> + name);</span><br><span class="line">          that.doNextTask();</span><br><span class="line">      &#125;;</span><br><span class="line">      <span class="keyword">this</span>.tasks.push(currentTask);</span><br><span class="line">      <span class="comment">// 在下一次的事件循环，即等所有任务先在队列中排好序之后，再开始按顺序执行</span></span><br><span class="line">      setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">          that.doNextTask();</span><br><span class="line">      &#125;,<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//按任务队列逐个执行，直到队列为空</span></span><br><span class="line">  _lazyMan.prototype.doNextTask = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">let</span> task = <span class="keyword">this</span>.tasks.shift();</span><br><span class="line">      task &amp;&amp; task();</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  _lazyMan.prototype.eat = <span class="function"><span class="keyword">function</span> (<span class="params">food</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">let</span> that = <span class="keyword">this</span>;</span><br><span class="line">      <span class="keyword">let</span> currentTask = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">'Eat '</span> + food + <span class="string">'~'</span>);</span><br><span class="line">          that.doNextTask();</span><br><span class="line">      &#125;;</span><br><span class="line">      <span class="keyword">this</span>.tasks.push(currentTask);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>; <span class="comment">// 链式调用</span></span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  _lazyMan.prototype.sleep = <span class="function"><span class="keyword">function</span> (<span class="params">time</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">let</span> that = <span class="keyword">this</span>;</span><br><span class="line">      <span class="keyword">let</span> currentTask = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">          setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">              <span class="built_in">console</span>.log(<span class="string">'Wake up after '</span> + time + <span class="string">'s.'</span>);</span><br><span class="line">              that.doNextTask();</span><br><span class="line">          &#125;,time * <span class="number">1000</span>)</span><br><span class="line">      &#125;;</span><br><span class="line">      <span class="keyword">this</span>.tasks.push(currentTask);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  _lazyMan.prototype.sleepFirst = <span class="function"><span class="keyword">function</span> (<span class="params">time</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">let</span> that = <span class="keyword">this</span>;</span><br><span class="line">      <span class="keyword">let</span> currentTask = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">          setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">              <span class="built_in">console</span>.log(<span class="string">'Wake up after '</span> + time + <span class="string">'s.'</span>);</span><br><span class="line">              that.doNextTask();</span><br><span class="line">          &#125;,time * <span class="number">1000</span>)</span><br><span class="line">      &#125;;</span><br><span class="line">      <span class="keyword">this</span>.tasks.unshift(currentTask); <span class="comment">// sleepFirst 这个任务需调到任务队列最前面</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">LazyMan</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> _lazyMan(name);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_lazyMan</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.promiseList = [];</span><br><span class="line">    <span class="keyword">let</span> getCurrentPromise = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'Hi! This is '</span> + name);</span><br><span class="line">            resolve();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">this</span>.promiseList.push(getCurrentPromise);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> that = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> queen = <span class="built_in">Promise</span>.resolve(); <span class="comment">// 所有 promise 的执行队列</span></span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i=<span class="number">0</span>; i&lt;=that.promiseList.length;i++ ) &#123;</span><br><span class="line">            queen = queen.then(that.promiseList[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,<span class="number">0</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_lazyMan.prototype.eat = <span class="function"><span class="keyword">function</span> (<span class="params">food</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> getCurrentPromise = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'Eat '</span> + food + <span class="string">' ~'</span>);</span><br><span class="line">            resolve();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">this</span>.promiseList.push(getCurrentPromise);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_lazyMan.prototype.sleep = <span class="function"><span class="keyword">function</span> (<span class="params">time</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> getCurrentPromise = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">'Wake up after '</span> + time + <span class="string">'s'</span>);</span><br><span class="line">                resolve();</span><br><span class="line">            &#125;,time*<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">this</span>.promiseList.push(getCurrentPromise);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">_lazyMan.prototype.sleepFirst = <span class="function"><span class="keyword">function</span> (<span class="params">time</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> getCurrentPromise = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve</span>) </span>&#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="built_in">console</span>.log(<span class="string">'Wake up after '</span> + time + <span class="string">'s'</span>);</span><br><span class="line">                resolve();</span><br><span class="line">            &#125;,time*<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">this</span>.promiseList.unshift(getCurrentPromise);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">LazyMan</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> _lazyMan(name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对比一下，不难发现，其实这两种方法思路都是一样的，都是先在第一次的事件循环中，先通过链式的调用，把所有任务按需求排好顺序，即第一种方法中的 tasks 数组和第二种方法中的 promiseList 数组的构建完成。不同的是，第一种方法是在完成当前任务后，通过显式的调用 doNextTask 方法来执行下一个任务；而第二种方法是通过 Promise 对象的 then 函数来控制执行顺序。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/26/碰到的IE的一个坑/" itemprop="url">
                   碰到的IE的一个坑
                 </a>
@@ -704,7 +816,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -714,7 +826,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
