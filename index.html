@@ -415,8 +415,8 @@
 <p>定时 4 秒是因为要在它第二遍 js 加载完成之后再执行这段代码才有效，也就是说，如果在 4 秒内还没加载完的话，依然会无法输入。这样表面上看上去是莫名其妙的解决了这个浏览器兼容性问题了，但我实在是受不了这样恶心的代码，我觉得就算 IE 恶心，很弱，也不至于会出现加载两次 JS 的这么明显而低级的 bug 的，问题更有可能是出现自己的代码里，我必须得看看到底这个第二次加载是怎么回事，一定会有更好的办法解决这个问题的！于是我开始排除一些不必要的干扰因素，慢慢的试图准确的定位一下问题，我先把所有 index.html 引用的 js注释掉，只留下 vendor  目录下的和一个登录页面需要 js,然后惊奇的发现，这个 bug 消失了！这说明问题就是由于我自己写的，刚刚注释掉的一些 js 文件里的代码引起的。看到这里，我知道这个问题很快就能探个究竟，得到解决了。进一步的，用二分法重复几下，很快就找到了引起这个问题的罪魁祸首是 filePreview.js 这个文件。这是个文件在线预览模块，而这个模块里有用到 iframe 标签，所以，基本上可以断定，这个奇葩的第二次加载 js 文件就是这个 iframe 引起的。google 了一下 iframe 的相关问题，stackoverflow 上看到有人说 iframe 的 sandbox 属性可以做一些安全限制：</p>
 <p><img src="http://o9gq7lu4s.bkt.clouddn.com/sandbox" alt="sandbox"></p>
 <p>我试了一下，把 filePreview directive 里的 iframe 标签加了个 <code>sandbox=&#39;&#39;</code> : </p>
-<p><code>&lt;iframe ng-if=&quot;file_type != &#39;default&#39; &amp;&amp; file_type!= &#39;image&#39;&quot; src=&quot;&quot; sandbox=&#39;&#39;&gt;&lt;/iframe&gt;</code></p>
-<p> 嗯，果然已经没有这些 JS 错误了,可又发现，这样一来，文件预览功能又不行了，这个 iframe 加载不了内容了，继续看相关的文档，<a href="https://msdn.microsoft.com/en-us/library/ms535258(v=vs.85" target="_blank" rel="external">iframe</a>.aspx) 元素, 和 <a href="https://msdn.microsoft.com/en-us/library/ms534622(v=vs.85" target="_blank" rel="external">security</a>.aspx) 属性，security 属性说明如下：</p>
+<p><code>&lt;iframe ng-if=&quot;file_type != &#39;default&#39; &amp;&amp; file_type!= &#39;image&#39;&quot; src=&quot;result_file_url&quot; sandbox=&#39;&#39;&gt;&lt;/iframe&gt;</code></p>
+<p> 嗯，果然已经没有这些 JS 错误了,可又发现，这样一来，文件预览功能又不行了，这个 iframe 加载不了内容了，继续看相关的文档，<a href="https://msdn.microsoft.com/en-us/library/ms535258(v=vs.85" target="_blank" rel="external">iframe</a>.aspx ) 元素, 和 <a href="https://msdn.microsoft.com/en-us/library/ms534622(v=vs.85" target="_blank" rel="external">security</a>.aspx ) 属性，security 属性说明如下：</p>
 <p> <img src="http://o9gq7lu4s.bkt.clouddn.com/security.jpg" alt="security"></p>
 <p> 最后，iframe 标签如下：</p>
 <p> <code>&lt;iframe ng-if=&quot;file_type != &#39;default&#39; &amp;&amp; file_type!= &#39;image&#39;&quot; src=&quot;&quot; security=&quot;restricted&quot;&gt;&lt;/iframe&gt;</code></p>
