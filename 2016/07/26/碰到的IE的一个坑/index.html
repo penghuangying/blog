@@ -84,16 +84,14 @@
 
 
 
-<meta name="description" content="昨天有个同事反应她在 IE11 浏览器里 Time Report(FA系统里的一个功能) 里 input 框里无法获取焦点输入，下图是她使用的 IE 的版本。
-
-我在自己 win10 虚拟机里用 IE11 试了一下，是可以正常使用的。然后借来老大的 windows 系统的电脑(公司里配的)，用 IE 打开访问，果然 input 框不能输入！打开调试工具(一开始打开调试工具的时候报了个系统错误，无法">
+<meta name="description" content="昨天有个同事反应她在 IE11 浏览器里 Time Report(FA系统里的一个功能) 里 input 框里无法获取焦点输入，下图是她使用的 IE 的版本。  我在自己 win10 虚拟机里用 IE11 试了一下，是可以正常使用的。然后借来老大的 windows 系统的电脑(公司里配的)，用 IE 打开访问，果然 input 框不能输入！打开调试工具(一开始打开调试工具的时候报了个系统错误，无法">
+<meta name="keywords" content="踩坑">
 <meta property="og:type" content="article">
 <meta property="og:title" content="碰到的IE的一个坑">
 <meta property="og:url" content="http://phying.me/2016/07/26/碰到的IE的一个坑/index.html">
 <meta property="og:site_name" content="Blog">
-<meta property="og:description" content="昨天有个同事反应她在 IE11 浏览器里 Time Report(FA系统里的一个功能) 里 input 框里无法获取焦点输入，下图是她使用的 IE 的版本。
-
-我在自己 win10 虚拟机里用 IE11 试了一下，是可以正常使用的。然后借来老大的 windows 系统的电脑(公司里配的)，用 IE 打开访问，果然 input 框不能输入！打开调试工具(一开始打开调试工具的时候报了个系统错误，无法">
+<meta property="og:description" content="昨天有个同事反应她在 IE11 浏览器里 Time Report(FA系统里的一个功能) 里 input 框里无法获取焦点输入，下图是她使用的 IE 的版本。  我在自己 win10 虚拟机里用 IE11 试了一下，是可以正常使用的。然后借来老大的 windows 系统的电脑(公司里配的)，用 IE 打开访问，果然 input 框不能输入！打开调试工具(一开始打开调试工具的时候报了个系统错误，无法">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://o9gq7lu4s.bkt.clouddn.com/ie_version.PNG">
 <meta property="og:image" content="http://o9gq7lu4s.bkt.clouddn.com/js_error.PNG">
 <meta property="og:image" content="http://o9gq7lu4s.bkt.clouddn.com/js_debug.PNG">
@@ -103,9 +101,7 @@
 <meta property="og:updated_time" content="2017-04-24T08:10:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="碰到的IE的一个坑">
-<meta name="twitter:description" content="昨天有个同事反应她在 IE11 浏览器里 Time Report(FA系统里的一个功能) 里 input 框里无法获取焦点输入，下图是她使用的 IE 的版本。
-
-我在自己 win10 虚拟机里用 IE11 试了一下，是可以正常使用的。然后借来老大的 windows 系统的电脑(公司里配的)，用 IE 打开访问，果然 input 框不能输入！打开调试工具(一开始打开调试工具的时候报了个系统错误，无法">
+<meta name="twitter:description" content="昨天有个同事反应她在 IE11 浏览器里 Time Report(FA系统里的一个功能) 里 input 框里无法获取焦点输入，下图是她使用的 IE 的版本。  我在自己 win10 虚拟机里用 IE11 试了一下，是可以正常使用的。然后借来老大的 windows 系统的电脑(公司里配的)，用 IE 打开访问，果然 input 框不能输入！打开调试工具(一开始打开调试工具的时候报了个系统错误，无法">
 <meta name="twitter:image" content="http://o9gq7lu4s.bkt.clouddn.com/ie_version.PNG">
 
 
@@ -300,13 +296,13 @@
 <p><img src="http://o9gq7lu4s.bkt.clouddn.com/ie_version.PNG" alt="IE 版本图"></p>
 <p>我在自己 win10 虚拟机里用 IE11 试了一下，是可以正常使用的。然后借来老大的 windows 系统的电脑(公司里配的)，用 IE 打开访问，果然 input 框不能输入！打开调试工具(一开始打开调试工具的时候报了个系统错误，无法查看 Dom，更无法调试，然后 Google 了一下，重新下载了个文件很快解决了就是了)，一堆的 JS 错误！嗯，没事，相信一切能稳定重现出来的问题都不是问题！接下来就是开始调试找 bug 了。</p>
 <p><img src="http://o9gq7lu4s.bkt.clouddn.com/js_error.PNG" alt="JS 错误"></p>
-<p>首先看 JS 错误内容，似乎是报了许多空指针,可奇怪的是，比如图中能看到的，round 和 random 方法是 Math 里的，Math 怎么会是 undefined 的呢？后面很多是报了 angular 未定义，可是当前页面，如果无视这些 js 错误，就只是输入框无法输入而已啊，angular 应用已经是有效果了啊？不然怎么看得到正常的页面呢？angular 怎么会未定义呢？带着这些疑问，我试着在其中一个 JS 文件里，写一点测试性的代码，帮助 debug。错误不是说 Math 和 angular 未定义吗？那我就看看 <code>typeof Math</code> <code>typeof angular</code> 到底是不是 undefined! 我在 apis.js 里加了下面一段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'test begin...'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'Math is '</span> + <span class="keyword">typeof</span> <span class="built_in">Math</span> + <span class="string">'\n'</span> + <span class="string">'angular is '</span> + <span class="keyword">typeof</span> angular);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'test end'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>首先看 JS 错误内容，似乎是报了许多空指针,可奇怪的是，比如图中能看到的，round 和 random 方法是 Math 里的，Math 怎么会是 undefined 的呢？后面很多是报了 angular 未定义，可是当前页面，如果无视这些 js 错误，就只是输入框无法输入而已啊，angular 应用已经是有效果了啊？不然怎么看得到正常的页面呢？angular 怎么会未定义呢？带着这些疑问，我试着在其中一个 JS 文件里，写一点测试性的代码，帮助 debug。错误不是说 Math 和 angular 未定义吗？那我就看看 <code>typeof Math</code> <code>typeof angular</code> 到底是不是 undefined! 我在 apis.js 里加了下面一段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'test begin...'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Math is '</span> + <span class="keyword">typeof</span> <span class="built_in">Math</span> + <span class="string">'\n'</span> + <span class="string">'angular is '</span> + <span class="keyword">typeof</span> angular);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'test end'</span>);</div></pre></td></tr></table></figure></p>
 <p>在 Chrome 浏览器里，输出符合预期，Math 和 angular 都是一个 object。再看看 IE 里的表现：</p>
 <p><img src="http://o9gq7lu4s.bkt.clouddn.com/js_debug.PNG" alt="JS Debug_1"></p>
 <p>诶？这 console log 里输出说明，Math 和 angular 都是有定义的呀？再往下翻看 JS 错误提示，又发现一段 console 的 log 输出：</p>
 <p><img src="http://o9gq7lu4s.bkt.clouddn.com/js_debug_2.PNG" alt="JS Debug_1"></p>
 <p>嗯！Math 这些都未定义！我在其他 js 文件里也做了相似的测试，都是这样的结果。说明所有 JS 文件被加载运行了两次！而且第一次运行的时候，执行环境是大家所熟知的，而第二次加载运行的时候，执行环境里竟然找不到 Math 等对象！我试图在测试代码里的 <code>console.log(&#39;Math is &#39; + typeof Math + &#39;\n&#39; + &#39;angular is &#39; + typeof angular);</code>前面打个断点，想分析第二次加载到底是怎么回事，可是这个断点只有在第一次加载的时候能卡住起到效果，第二次加载的时候没有任何效果。</p>
-<p>在调试的过程中，本想随便点点看看别的功能是否能正常使用的，想换个突破口。在这个过程中，发现在别的页面(修改密码页面)，先手动点一下 input 框，让其获得焦点，一旦这里的 input 框获得焦点成功之后，其他地方原本不能获取焦点的输入框都能获取焦点输入了(手动黑人问号脸…)。于是就想，要不弄一个隐藏的输入框，每次进入页面的时候，先让其自动获得焦点不就可以解决这个 IE 的迷之问题了？于是在 index.html 里多了这么一段恶心的脚本：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> foucsIEInput = <span class="built_in">document</span>.createElement(<span class="string">'input'</span>);</span><br><span class="line">        foucsIEInput.setAttribute(<span class="string">'id'</span>,<span class="string">'I_HATE_IE'</span>);</span><br><span class="line">        <span class="built_in">document</span>.body.appendChild(foucsIEInput);</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'I_HATE_IE'</span>).style.position = <span class="string">'absolute'</span>;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'I_HATE_IE'</span>).style.left = <span class="string">'-10000px'</span>;</span><br><span class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'I_HATE_IE'</span>).focus();</span><br><span class="line">    &#125;, <span class="number">4000</span>);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在调试的过程中，本想随便点点看看别的功能是否能正常使用的，想换个突破口。在这个过程中，发现在别的页面(修改密码页面)，先手动点一下 input 框，让其获得焦点，一旦这里的 input 框获得焦点成功之后，其他地方原本不能获取焦点的输入框都能获取焦点输入了(手动黑人问号脸…)。于是就想，要不弄一个隐藏的输入框，每次进入页面的时候，先让其自动获得焦点不就可以解决这个 IE 的迷之问题了？于是在 index.html 里多了这么一段恶心的脚本：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">    setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> foucsIEInput = <span class="built_in">document</span>.createElement(<span class="string">'input'</span>);</div><div class="line">        foucsIEInput.setAttribute(<span class="string">'id'</span>,<span class="string">'I_HATE_IE'</span>);</div><div class="line">        <span class="built_in">document</span>.body.appendChild(foucsIEInput);</div><div class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'I_HATE_IE'</span>).style.position = <span class="string">'absolute'</span>;</div><div class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'I_HATE_IE'</span>).style.left = <span class="string">'-10000px'</span>;</div><div class="line">        <span class="built_in">document</span>.getElementById(<span class="string">'I_HATE_IE'</span>).focus();</div><div class="line">    &#125;, <span class="number">4000</span>);</div><div class="line">&lt;<span class="regexp">/script&gt;</span></div></pre></td></tr></table></figure></p>
 <p>定时 4 秒是因为要在它第二遍 js 加载完成之后再执行这段代码才有效，也就是说，如果在 4 秒内还没加载完的话，依然会无法输入。这样表面上看上去是莫名其妙的解决了这个浏览器兼容性问题了，但我实在是受不了这样恶心的代码，我觉得就算 IE 恶心，很弱，也不至于会出现加载两次 JS 的这么明显而低级的 bug 的，问题更有可能是出现自己的代码里，我必须得看看到底这个第二次加载是怎么回事，一定会有更好的办法解决这个问题的！于是我开始排除一些不必要的干扰因素，慢慢的试图准确的定位一下问题，我先把所有 index.html 引用的 js注释掉，只留下 vendor  目录下的和一个登录页面需要 js,然后惊奇的发现，这个 bug 消失了！这说明问题就是由于我自己写的，刚刚注释掉的一些 js 文件里的代码引起的。看到这里，我知道这个问题很快就能探个究竟，得到解决了。进一步的，用二分法重复几下，很快就找到了引起这个问题的罪魁祸首是 filePreview.js 这个文件。这是个文件在线预览模块，而这个模块里有用到 iframe 标签，所以，基本上可以断定，这个奇葩的第二次加载 js 文件就是这个 iframe 引起的。google 了一下 iframe 的相关问题，stackoverflow 上看到有人说 iframe 的 sandbox 属性可以做一些安全限制：</p>
 <p><img src="http://o9gq7lu4s.bkt.clouddn.com/sandbox" alt="sandbox"></p>
 <p>我试了一下，把 filePreview directive 里的 iframe 标签加了个 <code>sandbox=&#39;&#39;</code> : </p>
@@ -346,8 +342,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/05/好记性不如烂笔头/" rel="next" title="好记性不如烂笔头">
-                <i class="fa fa-chevron-left"></i> 好记性不如烂笔头
+              <a href="/2016/02/08/一道帮助理解闭包的题/" rel="next" title="一道帮助理解闭包的题">
+                <i class="fa fa-chevron-left"></i> 一道帮助理解闭包的题
               </a>
             
           </div>
@@ -428,7 +424,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -438,7 +434,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
