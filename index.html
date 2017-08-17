@@ -239,6 +239,180 @@
             
               
                 
+                <a class="post-title-link" href="/2017/08/17/例说CSS中的margin折叠/" itemprop="url">
+                  例说 CSS 中的 margin 折叠
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-08-17T14:48:17+08:00" content="2017-08-17">
+              2017-08-17
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/08/17/例说CSS中的margin折叠/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/17/例说CSS中的margin折叠/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>CSS 中,<strong>毗连(adjoining)</strong> margins 会发生<strong>折叠(collapse)</strong>；这篇文章就是根据 CSS 规范文档中的<a href="https://www.w3.org/TR/CSS2/box.html#collapsing-margins" target="_blank" rel="external">第八章</a>和<a href="https://www.w3.org/TR/CSS2/visuren.html" target="_blank" rel="external">第九章</a>的内容，翻译了一些精要部分，并通过例子来说明和帮助理解。</p>
+<h3 id="什么是-adjoining-margins"><a href="#什么是-adjoining-margins" class="headerlink" title="什么是 adjoining margins"></a>什么是 adjoining margins</h3><p>两个 margin 称之为互为 <strong>adjoining</strong> 的，当且仅当同时满足以下三个条件：</p>
+<ul>
+<li>两者都属于正常流中的块级元素，并且是在同一个块级格式上下文(block fomatting context, BFC)中;</li>
+<li>两者之间没有行盒(line-box)、 清除浮动后的空隙(clearance)、padding、bodder 等隔断他们<em><a href="#example_1">(见例 1)</a></em>；</li>
+<li>两者是垂直相邻(vertically-adjacent)的，也就是说满足以下四个条件之一：<ul>
+<li>父元素的 top margin 和它的第一个正常流的子元素的 top margin；<em><a href="#example_1">(见例 1)</a></em></li>
+<li>元素的 bottom margin 和它的下一个正常流中的兄弟元素的 top margin；</li>
+<li>最后一个正常流中子元素的 bottom margin 和它的父元素的 bottom margin，其中这个父元素的 height 的计算最终值为 “auto”，min-height 为 0；</li>
+<li>一个元素如果没有生成新的 BFC，并且 min-height 为 0，height 为 0 或者 “auto”，并且没有正常流的子元素，那么该元素的 top 和 bottom margin 也是垂直相邻的。<em><a href="#example_2">(见例 2)</a></em></li>
+</ul>
+</li>
+</ul>
+<h3 id="折叠条件"><a href="#折叠条件" class="headerlink" title="折叠条件"></a>折叠条件</h3><p>满足 adjoining margins 会发生折叠，是以下两种除外：</p>
+<ul>
+<li>根元素（即 html 元素）不会发生折叠；</li>
+<li>如果元素的 top 和 bottom margin 是 adjoining 的，并且带有清除浮动后的空隙(clearance)，它可以和接下来的兄弟元素发生折叠，但折叠之后的 margin 不会再和父元素的 bottom margin 折叠。<em><a href="#example_3">(见例 3)</a></em></li>
+</ul>
+<p>水平方向的 margin 永远不会折叠。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>以上规则意味着以下几种行为：</p>
+<ul>
+<li>浮动元素和绝对定位的元素不和其他任何元素(包括它的子元素和兄弟元素)发生折叠；<em>(因为它们已经脱离了正常流)</em></li>
+<li>生成了新的 BFC 元素 (如设置了 overfolw 为 visible 之外的值)，不和它的子元素发生折叠，但可以和兄弟元素发生折叠；</li>
+<li>行内块级盒（inline-box）不会和其他任何元素发生折叠。<em>(因为是非块级元素)</em></li>
+<li>正常流的块级元素的 bottom margin 一定会和下一个正常流的兄弟块级元素的 top margin 折叠，除非这个兄弟元素有清除浮动后的空隙(clearance)。<em>(因为这种情况，只有 clearance 能隔断这两个 margin)</em></li>
+<li>父元素的 top margin 会和第一个正常流的子元素的 top margin 发生折叠，当且仅当父元素没有 top border 和 top padding,以及该子元素没有 clearance.</li>
+<li>父元素的 bottom margin 会和最后一个正常流的子元素的 bottom margin 发生折叠，当且仅当父元素的 min-height 为 0， height 为 “auto”,没有 bottom padding 和 bottom border，以及该子元素的 bottom margin 没有和有 clearance 的 top margin 折叠过<em><a href="#example_3">(见例 3)</a></em>。</li>
+<li>如果一个元素 min-height 为 0，height 为 0 或者 “atuo”,没有 border 和 padding，没有行盒(line-box),所有正常流的子元素(如果有) margin 都是折叠的，那么这个元素 top margin 和 bottom margin 会折叠<em><a href="#example_2">(见例 2)</a></em>。</li>
+</ul>
+<h3 id="举例说明和理解"><a href="#举例说明和理解" class="headerlink" title="举例说明和理解"></a>举例说明和理解</h3><h4 id="example_1">例1</h4>
+
+<blockquote>
+<ul>
+<li>两者是垂直相邻(vertically-adjacent)的，也就是说满足以下四个条件之一：<ul>
+<li>父元素的 top margin 和它的第一个正常流的子元素的 top margin；</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>我们先来看一个父元素 top margin 与它的第一个正常流的子元素的 top margin 折叠的例子，如下图：</p>
+<p><img src="http://o9gq7lu4s.bkt.clouddn.com/1_1.png" alt="图1_1"></p>
+<p>从上图中我们可以看到，container 和 content 这两个 div 的 margin-top 和 margin-bottom 的值都是 10px, 然而 content 离 body 的上下边界都是只有 10px, 这就是因为 container 的 top margin 与 content 的 top-margin 折叠在一起了的缘故。作为对比，我们来给 container 加一个 border-top 来隔断它们，看一下效果：</p>
+<p><img src="http://o9gq7lu4s.bkt.clouddn.com/1_2.png" alt="图1_2"></p>
+<p>当 container 加了 border-top 之后，container 和 content 的 top margin 就不再是<strong>毗连(adjoining)</strong>的了，因此 content 与 body 的上边距的距离就是 20px 了,图中的灰色部分是 content 的 top-margin,灰色部分以上的是 container 的 top-margin; 而 container 和 content 的 bottom margin 之间依然未被隔断，所以，还是保持折叠的。</p>
+<h4 id="example_2">例2</h4>
+
+<blockquote>
+<ul>
+<li>一个元素如果没有生成新的 BFC，并且 min-height 为 0，height 为 0 或者 “auto”，并且没有正常流的子元素，那么该元素的 top 和 bottom margin 也是垂直相邻的。</li>
+</ul>
+</blockquote>
+<p><img src="http://o9gq7lu4s.bkt.clouddn.com/2_1.png" alt="图2_1"></p>
+<p>如上图所示，content 是符合这个条件的，那么根据这条规则，content 的 top margin 和 bottom margin 应该折叠。图中可以看到，container 的高度是 30px, 它的 padding-top 和 padding-bottom 均为 10px，说明里面的 content 元素的 margin 撑开的内容一共为 30-10-10=10px；而我们设的 content 的 margin-top 和 margin-bottom 都是 10px, 即说明这两者发生了折叠。如果我们为 content 设置 overflow 属性值为 hidden ，会有什么效果呢？</p>
+<p><img src="http://o9gq7lu4s.bkt.clouddn.com/2_2.png" alt="图2_2"></p>
+<p>此时，container 的高度已经是 40px 了，说明 content 的 top margin 和 bottom margin 没有折叠了。为什么呢？原来 content 元素的 overflow 属性值为 hidden 时，这个元素已经生成了一个新的 BFC，已经不符合这个规则了，就没发生折叠了。</p>
+<h4 id="example_3">例3</h4>
+
+<blockquote>
+<ul>
+<li>如果元素的 top 和 bottom margin 是 adjoining 的，并且带有清除浮动后的空隙(clearance)，它可以和接下来的兄弟元素发生折叠，但折叠之后的 margin 不会再和父元素的 bottom margin 折叠。</li>
+</ul>
+</blockquote>
+<p><img src="http://o9gq7lu4s.bkt.clouddn.com/3_1.png" alt="图3_1"></p>
+<p><img src="http://o9gq7lu4s.bkt.clouddn.com/3_3.png" alt="图3_3"></p>
+<p>上图中的渲染结果如下图，从上到下标注分别为：</p>
+<p>1：container 元素的 padding-top 5px, 加上 outer 和 first 元素的折叠之后的 margin-top 10px，共 15px;</p>
+<p>2：first 元素的高度 20px;</p>
+<p>3：first 元素的 margin-bottom，10px;</p>
+<p>4：floated 元素的高度 20px;</p>
+<p>5：clear 和 sibling 元素折叠之后的 margin, 40px - 20px = 20px;</p>
+<p>6：container 元素的 padding-bottom 5px, 加上 outer 元素的 margin-bottom 10px,共 15px;</p>
+<p>这个例子中，由于 clear 元素的 top 和 bottom margin 是 adjoining 的，并且带有 clearance（ 值为 10px, 这里可以思考一下为什么是 10px?）,它和接下来的兄弟元素 sibling 发生折叠后，折叠之后的 margin 不再和父元素 outer 的 bottom margin 折叠，即 5 和 6 部分不会折叠。</p>
+<h3 id="一点感悟"><a href="#一点感悟" class="headerlink" title="一点感悟"></a>一点感悟</h3><p>CSS 的 margin 折叠是经常碰到的问题，有趣的是，哪怕开发者对折叠的一些细节原理不是很理解，在 Chrome 开发者调试工具等的帮助下，这调调那调调，也不是不能按设计图等完成日常开发工作。但是如果愿意花点时间看看官方规范文档，对一些不太理解的地方，自己动手写一些 demo 测试，举例子来帮助理解，等你彻底吃透它们的时候，不但以后碰到类似问题，解决以及解释起来，得心应手，工作效率自然就高了。还有一点就是，这能让人有一种解决了心里一个疙瘩一样的豁然开朗的感觉，这感觉又会刺激你去解决下一个问题，从而起到一个良性循环，不断成长的作用。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/01/20/LazyMan的两种实现方法/" itemprop="url">
                   LazyMan的两种实现方法
                 </a>
@@ -592,7 +766,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -602,7 +776,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
